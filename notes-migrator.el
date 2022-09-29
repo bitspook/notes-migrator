@@ -76,9 +76,12 @@ failed link conversions."
              (node (org-roam-node-from-id node-id)))
         (if (not node)
             (warn "Failed to convert org-roam link to denote because corresponding org-roam node wasn't found. [id=%s, filename=%s]" node-id filename)
-          (org-element-put-property el :type "denote")
-          (org-element-put-property el :path (nm--roam-node-denote-id node))
-          (nm--org-element-save-to-buffer el))))))
+
+          (let* ((begin (org-element-property :begin el))
+                 (end (org-element-property :end el))
+                 (s (buffer-substring begin end)))
+            (replace-string (format "id:%s" node-id) (format "denote:%s" (nm--roam-node-denote-id node))
+                            nil begin end)))))))
 
 (defun nm--add-org-file-tags (tags)
   "Set #+filetags in `current-buffer' to TAGS.
