@@ -1,5 +1,9 @@
 #+title: notes-migrator
 
+#+begin_quote
+Tested with Emacs versions: 29.0.5, 28.1
+#+end_quote
+
 ** Purpose
 
 To migrate notes from one software to another.

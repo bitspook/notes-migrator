@@ -110,14 +110,13 @@ Behavior:
   or tags, a new file is created in `denote-directory'"
   (let ((file (org-roam-node-file node))
         (new-name (expand-file-name (nm--roam-node-denote-filename node)
-                                    denote-directory))
-        (count 0))
+                                    denote-directory)))
     (with-temp-buffer
       (erase-buffer)
       (insert (org-file-contents file))
       (goto-char (point-min))
       ;; Delete the properties drawer roam inserts on top
-      (dotimes (_ 3) (delete-line))
+      (delete-region (point) (line-beginning-position 4))
       (org-mode)
       (nm--convert-roam-links-to-denote new-name)
 
