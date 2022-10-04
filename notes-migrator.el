@@ -145,8 +145,8 @@ org-roam-dailies entries. If it is an empty string, dailies are
 not migrated."
   (interactive "sTag for the dailies (leave empty to not migrate org-roam-dailies): ")
   (let* ((roam-nodes (mapcar #'nm--roam-node-from-file (org-roam-list-files)))
-         (notes (cl-remove-if (lambda (node) (s-contains-p "daily" (org-roam-node-file node))) roam-nodes))
-         (dailies (cl-remove-if-not (lambda (node) (s-contains-p "daily" (org-roam-node-file node))) roam-nodes)))
+         (notes (cl-remove-if (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes))
+         (dailies (cl-remove-if-not (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes)))
     (mapcar #'nm--migrate-roam-node notes)
 
     (when (and dailies-tag (not (string-empty-p (string-trim dailies-tag))))
