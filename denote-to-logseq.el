@@ -5,6 +5,7 @@
 
 (setq my-denote-directory "~/notes/test-denote/")
 (setq my-logseq-directory "~/notes/test-logseq/")
+
 ;;; Copy contents of DENOTE directory to LOGSEQ directory
 (defun nm--copy-files-from-to (from to)
   (let ((contents (directory-files from t "org$")))
@@ -16,6 +17,8 @@
 (with-temp-buffer
   (insert-file (car (directory-files my-logseq-directory t "20221006T215838")))
   (buffer-substring (point-min) (point-max)))
+
+;;; Get an Org mode file's TITLE
 
 ;;; Replace buffer contents via regexp
 (setq one-file (cadr (directory-files my-denote-directory t "org$")))
@@ -49,13 +52,3 @@
 
     (delete-file out-file)
     (write-file out-file nil)))
-
-(denote "many title" '("asdf") nil (car denote-dired-directories) nil nil)
-
-;; (replace-regexp (rx (and (group "[[denote:" (= 8 num))
-;; 			 (group	"T" (= 6 num))
-;; 			 (group "][" (* (or ascii nonascii)))
-;; 			 (group	"]]")))
-;; 		"asdf")
-
-;; [[denote:20220911T091111][my description]]
