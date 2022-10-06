@@ -30,3 +30,11 @@
     (write-file out-file nil)))
 
 (denote "many title" '("asdf") nil (car denote-dired-directories) nil nil)
+
+;; (replace-regexp (rx (and (group "[[denote:" (= 8 num))
+;; 			 (group	"T" (= 6 num))
+;; 			 (group "][" (* (or ascii nonascii)))
+;; 			 (group	"]]")))
+;; 		"asdf")
+
+;; [[denote:20220911T091111][my description]]
