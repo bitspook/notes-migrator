@@ -1,16 +1,37 @@
-;;; Global variables
+;;;; Migrating notes from DENOTE to LOGSEQ format (including links)
+;;; Global variables which are required
+(defvar my-denote-directory nil)
+(defvar my-logseq-directory nil)
+
+(setq my-denote-directory "~/notes/test-denote/")
+(setq my-logseq-directory "~/notes/test-logseq/")
+;;; Copy contents of DENOTE directory to LOGSEQ directory
+(defun nm--copy-files-from-to (from to)
+  (let ((contents (directory-files from t "org$")))
+    (mapcar #'(lambda (file)
+		(copy-file file to t))
+	    contents)))
+
+;;; Find a file based on denote ID
+(with-temp-buffer
+  (insert-file (car (directory-files my-logseq-directory t "20221006T215838")))
+  (buffer-substring (point-min) (point-max)))
+
+;;; Replace buffer contents via regexp
+(setq one-file (cadr (directory-files my-denote-directory t "org$")))
 
 
-;;; Copy all files from DENOTE-DIRECTORY to LOGSEQ-DIRECTORY
+(let ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
+			       (group	"T" (= 6 num))
+			       (group "][" (* (or ascii nonascii)))
+			       (group	"]]"))))
+      (logseq-link (concat "[[" "sexy schmexy" "]]")))
+  (with-temp-buffer
+    (insert-file one-file)
+    (replace-regexp denote-link-rx logseq-link)
+    (buffer-substring (point-min) (point-max))))
 
-
-;;; In LOGSEQ-DIRECTORY, convert denote links to logseq linksh
-
-;;;; List elements in LOGSEQ-DIRECTORY
-
-;;;; For each link: check for an element in listed elements
-
-;;;; Get TITLE of said element
+;;; Other stuff
 (defun nm--convert-denote-links-to-logseq (filename)
   (let ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
 				 (group	"T" (= 6 num))
