@@ -83,6 +83,26 @@ failed link conversions."
             (replace-string (format "id:%s" node-id) (format "denote:%s" (nm--roam-node-denote-id node))
                             nil begin end)))))))
 
+(defun nm--convert-denote-links-to-logseq (filename)
+  (let ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
+				 (group	"T" (= 6 num))
+				 (group "][" (* (or ascii nonascii)))
+				 (group	"]]")))))
+    (while (re-search-forward denote-link-rx nil t)
+      (let* (())))
+    )
+
+  )
+
+(defun test-fn (in-file out-file)
+  (with-temp-buffer
+    (erase-buffer)
+    (insert (org-file-contents in-file))
+
+    (delete-file out-file)
+    (write-file out-file nil)))
+
+
 (defun nm--add-org-file-tags (tags)
   "Set #+filetags in `current-buffer' to TAGS.
 Existing filetags aren't removed, but are converted to :tag:
