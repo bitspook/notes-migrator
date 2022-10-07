@@ -19,6 +19,17 @@
   (buffer-substring (point-min) (point-max)))
 
 ;;; Get an Org mode file's TITLE
+(with-temp-buffer
+  (insert-file (car (directory-files my-logseq-directory t "20221006T215838")))
+  (org-mode)
+  (let* ((buffer (org-element-parse-buffer))
+	 (header (org-element-contents buffer))
+	 (parent (org-element-property :parent buffer)))
+    (cddar header))
+    ;; (concat title
+    ;; 	    (buffer-substring (point-min) (point-max)))
+  )
+
 
 ;;; Replace buffer contents via regexp
 (setq one-file (cadr (directory-files my-denote-directory t "org$")))
