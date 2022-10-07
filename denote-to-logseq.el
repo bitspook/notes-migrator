@@ -22,28 +22,36 @@
 (with-temp-buffer
   (insert-file (car (directory-files my-logseq-directory t "20221006T215838")))
   (org-mode)
-  (let* ((buffer (org-element-parse-buffer))
-	 (header (org-element-contents buffer))
-	 (parent (org-element-property :parent buffer)))
-    (cddar header))
-    ;; (concat title
-    ;; 	    (buffer-substring (point-min) (point-max)))
-  )
-
-
+  (let* ((key (org-collect-keywords '("TITLE")))
+	 (string (cadar key)))
+    string))
 ;;; Replace buffer contents via regexp
 (setq one-file (cadr (directory-files my-denote-directory t "org$")))
 
 
-(let ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
-			       (group	"T" (= 6 num))
-			       (group "][" (* (or ascii nonascii)))
-			       (group	"]]"))))
-      (logseq-link (concat "[[" "sexy schmexy" "]]")))
+(let* ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
+				(group	"T" (= 6 num))
+				(group "][" (* (or ascii nonascii)))
+				(group	"]]")))))
   (with-temp-buffer
     (insert-file one-file)
-    (replace-regexp denote-link-rx logseq-link)
-    (buffer-substring (point-min) (point-max))))
+    (let* ((note-title (cadar (org-collect-keywords '("TITLE"))))
+	   (logseq-link (concat "[[" note-title "]]")))
+      (replace-regexp denote-link-rx logseq-link)
+      (buffer-substring (point-min) (point-max)))))
+
+;;; Replace denote-link with logseq-link, first try
+(defun nm--convert-denote-links-to-logseq (filename)
+  (let* ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
+				  (group "T" (= 6 num))
+				  (group "][" (* (or ascii nonascii)))
+				  (group "]]")))))
+    (with-temp-buffer
+      (insert-file filename)
+      (let* ((note-title (cadar (org-collect-keywords '("TITLE"))))
+	     (logseq-link (concat "[[" note-title "]]")))
+	(replace-regexp denote-link-rx logseq-link)
+	(buffer-substring (point-min) (point-max))))))
 
 ;;; Other stuff
 (defun nm--convert-denote-links-to-logseq (filename)
