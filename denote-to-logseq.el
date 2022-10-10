@@ -32,22 +32,20 @@ Use the following steps:
 (4) Using the linked-to file's title, replace the
 denote-link-format with logseq's.
 (5) REPEAT."
-  (let* ((denote-link-rx (rx (and (group "[[denote:" (= 8 num))
-				  (group "T" (= 6 num))
-				  (group "][" (* (or alnum print)))
-				  (group "]]")))))
+  (let ((denote-link-rx (rx "[[denote:")))
     (with-temp-buffer
       (insert-file-contents file)
-      (while (re-search-forward denote-link-rx nil t 1)
+      (if (re-search-forward denote-link-rx nil t)
 	(let* ((element (org-element-copy (org-element-context)))
+	       (contents (org-element-property :format element))
 	       (linked-id (org-element-property :path element))
 	       (linked-file (denote-get-path-by-id linked-id))
 	       (linked-title (denote-retrieve-title-value linked-file 'org))
-	       (logseq-link (concat "[[" linked-title "]]")))
-	  ;; (re-search-backward denote-link-rx nil t 1)
-	  (replace-match logseq-link)))
-      (buffer-substring (point-min) (point-max)))))
-
+	       (logseq-link (format "[[%s]]" linked-title)))
+	  ;; (replace-string (format "[[denote:%s][%s]]" linked-id ) logseq-link)
+	  contents))
+      ;; (buffer-substring (point-min) (point-max))
+      )))
 
 (nm--convert-links-denote-to-logseq-one-file "~/notes/test-logseq/20221004T094518--kontrollstrukturen-iteration__cl_syntax_fluss.org")
 
