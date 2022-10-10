@@ -21,6 +21,8 @@ SRC is supposed to be denote's, DEST logseq's notes directory."
        (file (denote-get-path-by-id tmp-id)))
   (denote-link--file-type-regexp (denote-retrieve-title-value file 'org)))
 
+
+
 (defun nm--convert-links-denote-to-logseq-one-file (file)
   "In FILE, convert all denote links to logseq links.
 Use the following steps:
@@ -36,16 +38,18 @@ denote-link-format with logseq's.
 				  (group "]]")))))
     (with-temp-buffer
       (insert-file-contents file)
-	(if (re-search-forward denote-link-rx nil t)
-	    (let* ((element (org-element-copy (org-element-context)))
-		   (linked-id (org-element-property :path element))
-		   (linked-file (denote-get-path-by-id linked-id))
-		   (linked-title (denote-retrieve-title-value linked-file 'org))
-		   (logseq-link (concat "[[" linked-title "]]")))
-	      (replace-match logseq-link)))
-	(buffer-substring (point-min) (point-max)))))
-	
-;; (nm--convert-links-denote-to-logseq-one-file "~/notes/test-logseq/20221004T094518--kontrollstrukturen-iteration__cl_syntax_fluss.org")
+      (while (re-search-forward denote-link-rx nil t 1)
+	(let* ((element (org-element-copy (org-element-context)))
+	       (linked-id (org-element-property :path element))
+	       (linked-file (denote-get-path-by-id linked-id))
+	       (linked-title (denote-retrieve-title-value linked-file 'org))
+	       (logseq-link (concat "[[" linked-title "]]")))
+	  ;; (re-search-backward denote-link-rx nil t 1)
+	  (replace-match logseq-link)))
+      (buffer-substring (point-min) (point-max)))))
+
+
+(nm--convert-links-denote-to-logseq-one-file "~/notes/test-logseq/20221004T094518--kontrollstrukturen-iteration__cl_syntax_fluss.org")
 
 ;;; Apply nm--convert-links to all files
 (defun nm--convert-links-denote-to-logseq (dir)
