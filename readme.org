@@ -1,5 +1,12 @@
 #+title: notes-migrator
 
+Tested with:
+  - Emacs versions
+    - 29.0.5
+    - 28.1
+  - org-roam versions
+    - v2.2.1
+
 ** Purpose
 
 To migrate notes from one software to another.

@@ -100,6 +100,13 @@ format."
     (org-element-put-property el :value (concat ":" (string-join (seq-concatenate 'list old-tags tags) ":") ":"))
     (nm--org-element-save-to-buffer el)))
 
+(defun nm--roam-node-from-file (fname)
+  "Find org-roam node for file with name FNAME."
+  (with-temp-buffer
+    (insert-file fname)
+    (goto-char (line-beginning-position 2))
+    (org-roam-node-from-id (org-element-property :value (org-element-at-point)))))
+
 (defun nm--migrate-roam-node (node &optional extra-tags)
   "Convert org-roam NODE to delink note.
 If EXTRA-TAGS is provided, also add these to delink note's tags.
@@ -110,14 +117,13 @@ Behavior:
   or tags, a new file is created in `denote-directory'"
   (let ((file (org-roam-node-file node))
         (new-name (expand-file-name (nm--roam-node-denote-filename node)
-                                    denote-directory))
-        (count 0))
+                                    denote-directory)))
     (with-temp-buffer
       (erase-buffer)
       (insert (org-file-contents file))
       (goto-char (point-min))
       ;; Delete the properties drawer roam inserts on top
-      (dotimes (_ 3) (delete-line))
+      (delete-region (point) (line-beginning-position 4))
       (org-mode)
       (nm--convert-roam-links-to-denote new-name)
 
@@ -131,19 +137,19 @@ Behavior:
       (write-file new-name nil))))
 
 ;;;###autoload
-(defun migrate-org-roam-to-denote (dailies-tag)
+(defun migrate-org-roam-to-denote (&optional dailies-tag)
   "Migrate all org-roam notes to denote.
 Denote notes are saved as new files in `denote-directory'. denote
 must be loaded and configured beforehand. DAILIES-TAG is added to
 org-roam-dailies entries. If it is an empty string, dailies are
 not migrated."
   (interactive "sTag for the dailies (leave empty to not migrate org-roam-dailies): ")
-  (let* ((roam-nodes (org-roam-node-list))
-         (notes (cl-remove-if (lambda (node) (s-contains-p "daily" (org-roam-node-file node))) roam-nodes))
-         (dailies (cl-remove-if-not (lambda (node) (s-contains-p "daily" (org-roam-node-file node))) roam-nodes)))
+  (let* ((roam-nodes (mapcar #'nm--roam-node-from-file (org-roam-list-files)))
+         (notes (cl-remove-if (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes))
+         (dailies (cl-remove-if-not (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes)))
     (mapcar #'nm--migrate-roam-node notes)
 
-    (when (not (string-empty-p (string-trim dailies-tag)))
+    (when (and dailies-tag (not (string-empty-p (string-trim dailies-tag))))
       (mapcar (lambda (n) (nm--migrate-roam-node n (list dailies-tag))) dailies))))
 
 (provide 'notes-migrator)
