@@ -16,16 +16,6 @@
 
 (defvar logseq-directory nil)
 
-;;;; Copy contents of DENOTE directory to LOGSEQ directory
-(defun nm--copy-org-files-from-to (src dest)
-  "Copy all Org files from SRC to DEST.
-SRC is supposed to be denote's, DEST logseq's notes directory."
-  ;; TODO: Rewrite using mechanisms provided by DENOTE
-  (let ((contents (directory-files src t "org$")))
-    (mapcar #'(lambda (file)
-		            (copy-file file dest t))
-	          contents)))
-
 (defun nm--convert-denote-links-to-logseq ()
   "Convert all denote links to logseq links in current buffer.
 Current-buffer should be in `org-mode'."
@@ -62,7 +52,6 @@ on windows."
       path
     (concat path "/")))
 
-;;;; Apply nm--convert-links to all files
 (defun nm--migrate-denote-to-logseq ()
   "Migrate all denote notes logseq.
 Migrate all org files in `denote-directory' to logseq notes in
