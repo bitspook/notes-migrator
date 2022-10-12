@@ -14,9 +14,9 @@
 
 (require 'denote)
 
-(defvar logseq-directory "~/notes/test-logseq/")
+(defvar logseq-directory nil)
 
-;;; Copy contents of DENOTE directory to LOGSEQ directory
+;;;; Copy contents of DENOTE directory to LOGSEQ directory
 (defun nm--copy-org-files-from-to (src dest)
   "Copy all Org files from SRC to DEST.
 SRC is supposed to be denote's, DEST logseq's notes directory."
@@ -36,7 +36,7 @@ Current-buffer should be in `org-mode'."
 	           (linked-id (org-element-property :path element))
 	           (linked-file (denote-get-path-by-id linked-id))
 	           (linked-title (denote-retrieve-title-value linked-file 'org))
-	           (logseq-link (format "[[%s]]" linked-title)))
+	           (logseq-link (format "[[%s]] " linked-title)))
         (delete-region (org-element-property :begin element)
                        (org-element-property :end element))
 	      (insert logseq-link)))))
@@ -46,7 +46,7 @@ Current-buffer should be in `org-mode'."
 Copy the file from `denote-directory' to `logseq-directory' and
 convert all denote links to logseq."
   (let ((dest (expand-file-name
-               (string-replace denote-directory "" file)
+	       (file-name-nondirectory file)
                logseq-directory)))
     (with-temp-buffer
       (insert-file-contents file)
@@ -62,7 +62,7 @@ on windows."
       path
     (concat path "/")))
 
-;;; Apply nm--convert-links to all files
+;;;; Apply nm--convert-links to all files
 (defun nm--migrate-denote-to-logseq ()
   "Migrate all denote notes logseq.
 Migrate all org files in `denote-directory' to logseq notes in
@@ -71,12 +71,3 @@ Migrate all org files in `denote-directory' to logseq notes in
          (logseq-directory (nm--ensure-dir-path logseq-directory))
          (denote-org-files (directory-files denote-directory t "\.org$")))
     (mapcar #'nm--migrate-denote-file-to-logseq denote-org-files)))
-
-;;; Other stuff
-(defun test-fn (in-file out-file)
-  (with-temp-buffer
-    (erase-buffer)
-    (insert (org-file-contents in-file))
-
-    (delete-file out-file)
-    (write-file out-file nil)))
