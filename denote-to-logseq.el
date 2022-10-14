@@ -29,7 +29,7 @@ Current-buffer should be in `org-mode'."
 	(replace-region-contents
 	 (org-element-property :begin element)
 	 (org-element-property :end element)
-	 (lambda () (format "%s" logseq-link)))
+	 (lambda () (format "%s " logseq-link)))
 	(org-fill-paragraph)))))
 
 (defun nm--migrate-denote-file-to-logseq (file)
