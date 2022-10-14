@@ -61,10 +61,3 @@ Migrate all org files in `denote-directory' to logseq notes in
          (logseq-directory (nm--ensure-dir-path logseq-directory))
          (denote-org-files (directory-files denote-directory t "\.org$")))
     (mapcar #'nm--migrate-denote-file-to-logseq denote-org-files)))
-
-(defun nm--migrate-denote-silos-to-loseq (dir-list)
-  (let* ((current-dir (car dir-list))
-	 (base-and-dir (split-string (file-relative-name current-dir) "/"))
-	 (base (car base-and-dir))
-	 (dir-name (cadr base-and-dir)))
-    dir-name))
