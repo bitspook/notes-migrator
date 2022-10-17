@@ -38,7 +38,10 @@ Copy the file from `denote-directory' to `logseq-directory' and
 convert all denote links to logseq."
   (let ((dest (expand-file-name
 	       (file-name-nondirectory file)
-               logseq-directory)))
+	       ;; TODO: UNLESS the file's directory is STRING=
+	       ;; to DENOTE-DIRECTORY -- i.e. if we are dealing with a subdirectory
+	       ;; or not -- CONCAT that directory's name to LOGSEQ-DIRECTORY
+	       logseq-directory)))
     (with-temp-buffer
       (insert-file-contents file)
       (org-mode)
