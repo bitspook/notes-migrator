@@ -36,18 +36,20 @@ Current-buffer should be in `org-mode'."
   "Convert denote note FILE to logseq.
 Copy the file from `denote-directory' to `logseq-directory' and
 convert all denote links to logseq."
-  (let ((dest (expand-file-name
-	       (file-name-nondirectory file)
-	       ;; TODO: UNLESS the file's directory is STRING=
-	       ;; to DENOTE-DIRECTORY -- i.e. if we are dealing with a subdirectory
-	       ;; or not -- CONCAT that directory's name to LOGSEQ-DIRECTORY
-	       logseq-directory)))
+  (let* ((denote-silo (file-name-directory file))
+	 (logseq-silo (concat logseq-directory
+			      (string-remove-prefix denote-directory
+						    denote-silo)))
+	 (dest (expand-file-name
+		(file-name-nondirectory file)
+		logseq-silo)))
     (with-temp-buffer
       (insert-file-contents file)
       (org-mode)
       (nm--convert-denote-links-to-logseq)
+      (unless (file-directory-p logseq-silo)
+	(make-directory logseq-silo))
       (write-file dest))))
-
 (defun nm--ensure-dir-path (path)
   "Ensure that PATH is a directory path.
 A path is directory path if it ends with a \"/\". Might not work
