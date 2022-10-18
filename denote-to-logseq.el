@@ -50,6 +50,7 @@ convert all denote links to logseq."
       (unless (file-directory-p logseq-silo)
 	(make-directory logseq-silo))
       (write-file dest))))
+
 (defun nm--ensure-dir-path (path)
   "Ensure that PATH is a directory path.
 A path is directory path if it ends with a \"/\". Might not work
@@ -64,5 +65,5 @@ Migrate all org files in `denote-directory' to logseq notes in
 `logseq-directory'."
   (let* ((denote-directory (nm--ensure-dir-path denote-directory))
          (logseq-directory (nm--ensure-dir-path logseq-directory))
-         (denote-org-files (directory-files denote-directory t "\.org$")))
+         (denote-org-files (directory-files-recursively denote-directory "\.org$")))
     (mapcar #'nm--migrate-denote-file-to-logseq denote-org-files)))
