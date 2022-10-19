@@ -1,10 +1,11 @@
-;;; notes-migrator.el --- Migrate notes from org-roam to denote
+;;; nm-org-roam-to-denote.el --- Migrate notes from org-roam to denote
 
 ;; Copyright (C) 2022 bitspook <bitspook@proton.me>
 
-;; Author: bitspook <bitspook@proton.me>
+;; Author: bitspook
 ;; Version: 0.1
 ;; URL: https://github.com/bitspook/notes-migrator
+;; Package-Requires: ((emacs "28.1") (denote "1.0.0")
 
 ;;; Commentary:
 ;; Migrate org-roam notes to denote. It does not make any changes to org-roam
@@ -12,7 +13,6 @@
 ;; conflicting files.
 
 ;;; Code:
-
 (require 'denote)
 (require 'org-element)
 
@@ -137,7 +137,7 @@ Behavior:
       (write-file new-name nil))))
 
 ;;;###autoload
-(defun migrate-org-roam-to-denote (&optional dailies-tag)
+(defun nm-migrate-org-roam-to-denote (&optional dailies-tag)
   "Migrate all org-roam notes to denote.
 Denote notes are saved as new files in `denote-directory'. denote
 must be loaded and configured beforehand. DAILIES-TAG is added to
@@ -152,5 +152,5 @@ not migrated."
     (when (and dailies-tag (not (string-empty-p (string-trim dailies-tag))))
       (mapcar (lambda (n) (nm--migrate-roam-node n (list dailies-tag))) dailies))))
 
-(provide 'notes-migrator)
-;;; notes-migrator.el ends here
+(provide 'nm-org-roam-to-denote)
+;;; nm-org-roam-to-denote.el ends here

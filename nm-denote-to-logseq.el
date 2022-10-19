@@ -1,4 +1,4 @@
-;;; package -- Utilities to migrate denote notes to logseq
+;;; nm-denote-to-logseq.el -- Utilities to migrate denote notes to logseq
 ;;
 ;; Author: hapst3r
 ;; Version: 0.1
@@ -8,10 +8,9 @@
 ;; Package-Requires: ((emacs "27.2") (denote "1.0.0")
 ;;
 ;;; Commentary:
-;; A WIP package for migrating Denote notes to Logseq
+;; Migrate Denote (org-mode only) notes to Logseq.
 ;;
 ;;; Code:
-
 (require 'denote)
 
 (defvar logseq-directory nil)
@@ -59,11 +58,15 @@ on windows."
       path
     (concat path "/")))
 
-(defun nm--migrate-denote-to-logseq ()
+(defun nm-migrate-denote-to-logseq ()
   "Migrate all denote notes logseq.
 Migrate all org files in `denote-directory' to logseq notes in
 `logseq-directory'."
+  (interactive)
   (let* ((denote-directory (nm--ensure-dir-path denote-directory))
          (logseq-directory (nm--ensure-dir-path logseq-directory))
          (denote-org-files (directory-files-recursively denote-directory "\.org$")))
     (mapcar #'nm--migrate-denote-file-to-logseq denote-org-files)))
+
+(provide 'nm-denote-to-logseq)
+;;; nm-denote-to-logseq.el ends here

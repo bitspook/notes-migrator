@@ -1,11 +1,65 @@
 #+title: notes-migrator
 
-Tested with:
+** Usage
+
+You can do this in one of the following ways:
+
+1. *Download this script*. (e.g =git clone https://github.com/bitspook/notes-migrator=)
+
+2. To *load the migration script*, in Emacs, run =M-x load-file=, and select the
+   migration script you want to run (e.g =nm-org-roam-to-denote.el=). See
+   *[[id:00f586a4-f8db-4a13-892a-f8efacb5ee65][Supported Conversions]]* section below for supported migration scripts.
+
+3. *Rtfm;* Migration script is now loaded, and there should be a function with
+   =nm-migrate-= prefix loaded in Emacs. e.g for org-roam to denote migration,
+   there should be =nm-migrate-org-roam-to-denote=. You can invoke =C-h f= and
+   enter/select this function to read its documentation.
+
+4. *Run migration* by invoking the migration function. =M-x= and selecting the
+   =nm-migrate-*= function should do the job
+
+** Supported Conversions
+:PROPERTIES:
+:ID:       00f586a4-f8db-4a13-892a-f8efacb5ee65
+:END:
+
+*** [[https://github.com/org-roam/org-roam/][org-roam]] to [[https://protesilaos.com/emacs/denote][denote]]
+
+- Script: [[file:nm-org-roam-to-denote.el][nm-org-roam-to-denote.el]]
+- Command: =nm-migrate-org-roam-to-denote=
+- Maintainer: [[https://github.com/bitspook][@bitspook]]
+
+- Tested with:
   - Emacs versions
     - 29.0.5
     - 28.1
   - org-roam versions
     - v2.2.1
+
+**** Known limitations
+
+- If you are using org-roam's feature of having multiple nodes in a single file
+  (having a ID on a subtree in a org-roam file treats the subtree as a separate
+  note in itself), then the same file will result in multiple denote notes. The
+  filename will be different (it is one file per sub-note), but original file's
+  complete content is present in each.
+
+*** [[https://protesilaos.com/emacs/denote][denote]] to [[https://logseq.com/][logseq]]
+
+- Script: [[file:nm-denote-to-logseq.el][nm-denote-to-logseq.el]]
+- Command: =nm-migrate-denote-to-logseq=
+- Maintainer: [[https://github.com/hapst3r][@haspt3r]]
+
+- Tested with:
+  - Emacs versions
+    - 28.1
+  - Denote version
+    - v1.0.0
+
+**** Notes
+
+- It migrate only org-roam denote notes. If you use other supported denote
+  formats, please raise an issue.
 
 ** Purpose
 
@@ -19,58 +73,3 @@ with my actual of notes instead of just toying around.
 If you want conversion b/w software not covered in this repo and are willing to
 get your hands dirty, please create an issue. I will assist you write the
 required code. Or you can create a PR if you have already written one.
-
-** Supported Conversions
-
-*** [[https://github.com/org-roam/org-roam/][org-roam]] to [[https://protesilaos.com/emacs/denote][denote]]
-
-**** Usage
-
-1. Install and setup denote. org-roam notes will be copied, converted, and saved
-   in =denote-directory=
-
-   For example, this is what I have in [[https://github.com/bitspook/spookmax.d][my emacs-config]]:
-
-    #+begin_src elisp
-      (use-package denote
-        :config
-        (setq denote-directory (expand-file-name "denotes" org-directory)
-              denote-date-prompt-use-org-read-date t)
-        (add-hook 'dired-mode-hook #'denote-dired-mode))
-    #+end_src
-
-2. Load =./notes-migrator.el=
-
-   You can do this in one of the following ways:
-
-   1. Copy paste it in an elisp buffer (e.g =*scratch*=), and run =M-x
-      eval-buffer=
-   2. Download this script somehow (e.g =git clone https://github.com/bitspook/notes-migrator=), and run =M-x load-file= to select this file
-   3. If you use [[https://github.com/radian-software/straight.el][straight.el]], you can do
-
-      #+begin_src elisp
-        (use-package notes-migrator
-          :straight (notes-migrator
-                     :type git
-                     :host github
-                     :repo "bitspook/notes-migrator"))
-      #+end_src
-   4. Press =M-:= in Emacs and copy paste below snippet in it
-
-      #+begin_src elisp
-        (with-current-buffer (url-retrieve-synchronously "https://raw.githubusercontent.com/bitspook/notes-migrator/master/notes-migrator.el")
-          (goto-char (point-min))
-          (re-search-forward "^$")
-          (delete-region (point) (point-min))
-          (eval-buffer))
-      #+end_src
-
-3. Run =M-x migrate-org-roam-to-denote=
-
-**** Known limitations
-
-- If you are using org-roam's feature of having multiple nodes in a single file
-  (having a ID on a subtree in a org-roam file treats the subtree as a separate
-  note in itself), then the same file will result in multiple denote notes. The
-  filename will be different (it is one file per sub-note), but original file's
-  complete content is present in each.
