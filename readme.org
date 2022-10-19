@@ -58,8 +58,9 @@ You can do this in one of the following ways:
 
 **** Notes
 
-- It migrate only org-roam denote notes. If you use other supported denote
-  formats, please raise an issue.
+- It migrate only org-roam denote notes.
+- Invalid denote links are ignored i.e they are left behind in the migrated
+  notes as-is
 
 ** Purpose
 
@@ -70,6 +71,11 @@ Fluidly taking notes is a powerful habit. In the quest of a fluent workflow, you
 I use to convert my notes from one software to another, so I can assess them
 with my actual of notes instead of just toying around.
 
-If you want conversion b/w software not covered in this repo and are willing to
-get your hands dirty, please create an issue. I will assist you write the
-required code. Or you can create a PR if you have already written one.
+** Contributing
+
+If you want conversion b/w software not covered in this repo, or want different
+behavior for existing migration scripts, please create an [[https://github.com/bitspook/notes-migrator/issues][issue on Github]].
+
+If you're willing to get your hands dirty and write some code, I will assist you
+write the required code. Or you can create a PR if you have already written one.
+Or we wait until The One^{TM} comes along.
