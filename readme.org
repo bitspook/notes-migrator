@@ -56,11 +56,22 @@ You can do this in one of the following ways:
   - Denote version
     - v1.0.0
 
-**** Notes
+**** Known limitations
 
-- It migrate only org-roam denote notes.
+- You need to specify an existing =LOGSEQ-DIRECTORY=.  Specifying a nonexistent one
+  will result in an error.  Specifying nothing (NIL), everything will be copied into
+  your home folder (on linux).
+- In =LOGSEQ-DIRECTORY=, files with identical names (i.e. earlier transferred notes)
+  will be overwritten without notification.
+- Links are transferred in a lossy way.  In Denote, a link consists of two blocks
+  within square brackets: [ [link] [description] ] (without whitespace).  Logseq
+  links can work the same way but currently, only [ [link] ] (without whitespace) is
+  implemented.
+- The tags currently don't work.  Denote uses #+FILETAGS and Logseq #+TAGS in the
+  header line, Denote uses :TAG1:TAG2: format and Logseq uses TAG1, TAG2 format.
 - Invalid denote links are ignored i.e they are left behind in the migrated
   notes as-is
+
 
 ** Purpose
 
