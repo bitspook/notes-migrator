@@ -21,15 +21,19 @@ Current-buffer should be in `org-mode'."
   (let ((denote-link-rx (rx "[[denote:")))
     (while (re-search-forward denote-link-rx nil t)
       (when-let* ((element (org-element-copy (org-element-context)))
-                  (linked-id (org-element-property :path element))
+		  (link-desc (buffer-substring-no-properties
+			      (org-element-property :contents-begin element)
+			      (org-element-property :contents-end element)))
+		  (linked-id (org-element-property :path element))
                   (linked-file (denote-get-path-by-id linked-id))
                   (linked-title (denote-retrieve-title-value linked-file 'org))
-                  (logseq-link (format "[[%s]]" linked-title)))
+                  (logseq-link (if (string= link-desc linked-title)
+				   (format "[[%s]]" linked-title)
+				 (format "[[%s][%s]]" linked-title link-desc))))
         (replace-region-contents
          (org-element-property :begin element)
          (org-element-property :end element)
-         (lambda () (format "%s " logseq-link)))
-        (org-fill-paragraph)))))
+         (lambda () (format "%s " logseq-link)))))))
 
 (defun nm--migrate-denote-file-to-logseq (file)
   "Convert denote note FILE to logseq.
@@ -50,7 +54,7 @@ convert all denote links to logseq."
       (org-mode)
       (nm--convert-denote-links-to-logseq)
       (unless (file-directory-p logseq-silo)
-        (make-directory logseq-silo))
+        (make-directory logseq-silo t))
       (write-file dest))))
 
 (defun nm-migrate-denote-to-logseq ()
