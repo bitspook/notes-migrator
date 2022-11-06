@@ -144,7 +144,10 @@ must be loaded and configured beforehand. DAILIES-TAG is added to
 org-roam-dailies entries. If it is an empty string, dailies are
 not migrated."
   (interactive "sTag for the dailies (leave empty to not migrate org-roam-dailies): ")
-  (let* ((roam-nodes (mapcar #'nm--roam-node-from-file (org-roam-list-files)))
+  (let* ((roam-nodes
+          (cl-remove-if
+           (lambda (n) (eq n nil))
+           (mapcar #'nm--roam-node-from-file (org-roam-list-files))))
          (notes (cl-remove-if (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes))
          (dailies (cl-remove-if-not (lambda (node) (string-match-p "daily" (org-roam-node-file node))) roam-nodes)))
     (mapcar #'nm--migrate-roam-node notes)
