@@ -35,6 +35,19 @@ Current-buffer should be in `org-mode'."
          (org-element-property :end element)
          (lambda () (format "%s " logseq-link)))))))
 
+(defun nm--convert-denote-tags-to-logseq (file)
+  "Convert denote tags header to logseq tags header in file."
+  (let* ((tags (denote-retrieve-keywords-value file 'org))
+	 (tags-joined (string-join tags ", "))
+	 (denote-tags-rx (rx "#+filetags:"))
+	 (logseq-tags-string (concat "#+tags:" tags-joined)))
+    (when (re-search-forward denote-tags-rx nil t)
+      (let ((element (org-element-copy (org-element-context))))
+	(replace-region-contents
+	 (org-element-property :begin element)
+	 (org-element-property :end element)
+	 (lambda () (format "%s" logseq-tags-string)))))))
+
 (defun nm--migrate-denote-file-to-logseq (file)
   "Convert denote note FILE to logseq.
 Copy the file from `denote-directory' to `logseq-directory' and
@@ -52,6 +65,7 @@ convert all denote links to logseq."
     (with-temp-buffer
       (insert-file-contents file)
       (org-mode)
+      (nm--convert-denote-tags-to-logseq file)
       (nm--convert-denote-links-to-logseq)
       (unless (file-directory-p logseq-silo)
         (make-directory logseq-silo t))
