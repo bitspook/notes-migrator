@@ -1,4 +1,3 @@
-;; fasdf
 ;;; nm-denote-to-logseq.el -- Utilities to migrate denote notes to logseq
 ;;
 ;; Author: hapst3r
