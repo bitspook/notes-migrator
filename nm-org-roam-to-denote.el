@@ -3,7 +3,7 @@
 ;; Copyright (C) 2022 bitspook <bitspook@proton.me>
 
 ;; Author: bitspook
-;; Version: 0.1
+;; Version: 0.1.0
 ;; URL: https://github.com/bitspook/notes-migrator
 ;; Package-Requires: ((emacs "28.1") (denote "1.0.0")
 

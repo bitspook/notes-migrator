@@ -1,7 +1,6 @@
 ;;; nm-denote-to-logseq.el -- Utilities to migrate denote notes to logseq
 ;;
 ;; Author: hapst3r
-;; Version: 0.1
 ;; URL: https://github.com/bitspook/notes-migrator/denote-to-logseq.el
 ;; Keywords: Denote, Logseq
 ;; Version: 0.1.0
