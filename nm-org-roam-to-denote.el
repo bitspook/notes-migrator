@@ -45,7 +45,7 @@ the 3 formats:
 (defun nm--roam-node-denote-id (node)
   "Create denote identifier for org-roam NODE.
 It returns creation timestamp of NODE, which is obtained using `nm--roam-node-ctime'."
-  (format-time-string denote--id-format (nm--roam-node-ctime node)))
+  (format-time-string denote-id-format (nm--roam-node-ctime node)))
 
 (defun nm--roam-node-denote-filename (node)
   "Return valid denote file name for org-roam NODE."
