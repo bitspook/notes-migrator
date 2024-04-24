@@ -105,6 +105,7 @@ format."
   (with-temp-buffer
     (insert-file fname)
     (goto-char (line-beginning-position 2))
+    (org-mode)
     (org-roam-node-from-id (org-element-property :value (org-element-at-point)))))
 
 (defun nm--migrate-roam-node (node &optional extra-tags)
