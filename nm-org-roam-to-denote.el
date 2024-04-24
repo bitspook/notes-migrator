@@ -52,7 +52,7 @@ It returns creation timestamp of NODE, which is obtained using `nm--roam-node-ct
   (let* ((id (nm--roam-node-denote-id node))
          (tags (mapcar #'downcase (org-roam-node-tags node)))
          (title (or (string-replace "/" "-" (org-roam-node-title node)) "untitled")))
-    (concat id "--" (denote-sluggify title) "__" (string-join tags "_") ".org")))
+    (concat id "--" (denote-sluggify-title title) "__" (string-join tags "_") ".org")))
 
 (defun nm--org-element-save-to-buffer (el)
   "Save `org-element' EL back in `current-buffer'.
