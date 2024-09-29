@@ -44,6 +44,21 @@ You can do this in one of the following ways:
   filename will be different (it is one file per sub-note), but original file's
   complete content is present in each.
 
+*** [[https://github.com/Kungsgeten/org-brain][org-brain]] to [[https://protesilaos.com/emacs/denote][denote]]
+
+- Script: [[file:nm-org-brain-to-denote.el][nm-org-brain-to-denote.el]]
+- Command: =nm-migrate-org-brain-to-denote=
+- Maintainer: [[https://github.com/MArpoagaus][@MArpoagaus]]
+
+- Tested with:
+  - Emacs versions
+    - 29.4
+  - org-brain versions
+    - v0.94
+
+**** Known limitations
+- The converstions seams to fail for files with latex previews enabled on startup.
+
 *** [[https://protesilaos.com/emacs/denote][denote]] to [[https://logseq.com/][logseq]]
 
 - Script: [[file:nm-denote-to-logseq.el][nm-denote-to-logseq.el]]
@@ -67,6 +82,7 @@ You can do this in one of the following ways:
   header line, Denote uses :TAG1:TAG2: format and Logseq uses TAG1, TAG2 format.
 - Invalid denote links are ignored i.e they are left behind in the migrated
   notes as-is
+
 
 
 ** Purpose
