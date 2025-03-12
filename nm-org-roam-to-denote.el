@@ -124,7 +124,7 @@ Behavior:
       (insert (org-file-contents file))
       (goto-char (point-min))
       ;; Delete the properties drawer roam inserts on top
-      (delete-region (point) (line-beginning-position 4))
+      (delete-region (point) (1+ (search-forward ":END:")))
       (org-mode)
       (nm--convert-roam-links-to-denote new-name)
 
